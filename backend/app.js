@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import HttpError from './models/http-error.js';
+import mongoose from 'mongoose';
 
 import placesRoutes from './routes/places-routes.js';
 import usersRoutes from './routes/users-routes.js';
@@ -29,4 +30,12 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'An unknown error occured.'});
 });
  
-app.listen(5000);
+
+mongoose
+.connect('mongodb+srv://dmytro:1DKkDpt7ncBGDX17@cluster0.nhtjl.mongodb.net/places?retryWrites=true&w=majority')
+.then(() => {
+    app.listen(5000);
+})
+.catch(err => {
+    console.log(err);
+});
