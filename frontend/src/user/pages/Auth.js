@@ -47,7 +47,7 @@ const Auth = () => {
                         'Content-Type': 'application/json'
                     }
                 );
-                auth.login(responseData.user.id);
+                auth.login(responseData.userId, responseData.token);
             } catch(err) {
                  // empty catch block because we handle errors in our custom useHttpClient hook
             }
@@ -60,7 +60,7 @@ const Auth = () => {
 
             try { 
                 const responseData = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData);
-                auth.login(responseData.user.id);
+                auth.login(responseData.userId, responseData.token);
             } catch (err) {}
         }
     }
