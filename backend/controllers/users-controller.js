@@ -36,7 +36,7 @@ export const signup = async (req, res, next) => {
     const createdUser = new User({
         name, 
         email,
-        image: 'https://delo.ua/static/content/thumbs/1200x900/4/65/qu7bnl---c4x3x50px50p-c4x3x50px50p--b42049eeb10c6efc1ee2a8a65b689654.jpg',
+        image: req.file.path,
         password,
         places: []
     });
@@ -63,8 +63,6 @@ export const login = async (req, res, next) => {
     if (!existingUser || existingUser.password !== password) {
         return next(new HttpError('Invalid credentials.', 401));
     }
-
-    console.log('LOGGED IN!');
 
     res.json({message: 'Logged in', user: existingUser.toObject({ getters: true })});
 }

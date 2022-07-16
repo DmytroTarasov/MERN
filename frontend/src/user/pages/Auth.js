@@ -9,6 +9,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 import './Auth.css';
 
@@ -51,21 +52,16 @@ const Auth = () => {
                  // empty catch block because we handle errors in our custom useHttpClient hook
             }
         } else {
-            try { 
-                const responseData = await sendRequest('http://localhost:5000/api/users/signup', 'POST',
-                    JSON.stringify({
-                        name: formState.inputs.name.value,
-                        email: formState.inputs.email.value,
-                        password: formState.inputs.password.value 
-                    }),
-                    {
-                        'Content-Type': 'application/json'
-                    }
-                );
+            const formData = new FormData();
+            formData.append('email', formState.inputs.email.value);
+            formData.append('name', formState.inputs.name.value);
+            formData.append('password', formState.inputs.password.value);
+            formData.append('image', formState.inputs.image.value);
 
+            try { 
+                const responseData = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData);
                 auth.login(responseData.user.id);
-            } catch (err) {
-            }
+            } catch (err) {}
         }
     }
 
@@ -75,13 +71,18 @@ const Auth = () => {
         if (!isLoginMode) {
             setFormData({
                 ...formState.inputs,
-                name: undefined
+                name: undefined,
+                image: undefined
             }, formState.inputs.email.isValid && formState.inputs.password.isValid);
         } else { // we are moving to a signup mode
             setFormData({
                 ...formState.inputs,
                 name: {
                     value: '',
+                    isValid: false
+                },
+                image: {
+                    value: null,
                     isValid: false
                 }
             }, false);
@@ -108,7 +109,7 @@ const Auth = () => {
                             onInput={inputHandler}
                         />
                     )}
-
+                    {!isLoginMode && <ImageUpload center id="image" onInput={inputHandler} errorText="Please provide an image." />}
                     <Input 
                         element="input"
                         id="email"

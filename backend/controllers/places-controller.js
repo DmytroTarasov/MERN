@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import fs from 'fs';
 
 import HttpError from '../models/http-error.js';
 import { validationResult } from 'express-validator';
@@ -66,7 +67,7 @@ export const createPlace = async (req, res, next) => {
         description,
         address,
         location: coordinates,
-        image: 'https://delo.ua/static/content/thumbs/1200x900/4/65/qu7bnl---c4x3x50px50p-c4x3x50px50p--b42049eeb10c6efc1ee2a8a65b689654.jpg',
+        image: req.file.path,
         creator
     });
 
@@ -141,6 +142,8 @@ export const deletePlace = async (req, res, next) => {
         return next(new HttpError('Could not find a place for the provided id.', 404));
     }
 
+    const imagePath = place.image;
+
     try {
         const sess = await mongoose.startSession();
         sess.startTransaction();
@@ -153,6 +156,8 @@ export const deletePlace = async (req, res, next) => {
     } catch (err) {
         return next(new HttpError('Something went wrong, could not delete a place.', 500));
     }
+
+    fs.unlink(imagePath, err => console.log(err)); // delete a place image
     
     res.status(200).json({ message: 'A place was successfully deleted' });
 }
