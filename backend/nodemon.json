@@ -1,0 +1,9 @@
+{
+    "env": {
+        "DB_USER": "dmytro",
+        "DB_PASSWORD": "1DKkDpt7ncBGDX17",
+        "DB_NAME": "mern",
+        "API_KEY": "pk.912ce52df2752fe03f2921e615c7fd92",
+        "JWT_KEY": "supersecret_dont_share"
+    }
+}

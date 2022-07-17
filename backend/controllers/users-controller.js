@@ -61,7 +61,7 @@ export const signup = async (req, res, next) => {
     let token;
     try {
         // 1st argument - which creds to put into the token
-        token = jwt.sign({userId: createdUser.id, email: createdUser.email}, 'supersecret_dont_share', { expiresIn: '1h' });
+        token = jwt.sign({userId: createdUser.id, email: createdUser.email}, process.env.JWT_KEY, { expiresIn: '1h' });
     } catch (err) {
         return next(new HttpError('Signing up failed, please try again.', 500));
     }
@@ -105,7 +105,7 @@ export const login = async (req, res, next) => {
     let token;
     try {
         // 1st argument - which creds to put into the token
-        token = jwt.sign({userId: existingUser.id, email: existingUser.email}, 'supersecret_dont_share', { expiresIn: '1h' });
+        token = jwt.sign({userId: existingUser.id, email: existingUser.email}, process.env.JWT_KEY, { expiresIn: '1h' });
     } catch (err) {
         return next(new HttpError('Logging in failed, please try again.', 500));
     }

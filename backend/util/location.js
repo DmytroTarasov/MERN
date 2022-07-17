@@ -1,7 +1,7 @@
 import HttpError from "../models/http-error.js";
 import axios from "axios";
 
-const API_KEY = 'pk.912ce52df2752fe03f2921e615c7fd92';
+const API_KEY = process.env.API_KEY;
 
 export default async function getCoordsForAddress(address) {
     const response = await axios.get(

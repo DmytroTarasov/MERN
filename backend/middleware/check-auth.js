@@ -13,7 +13,7 @@ export default (req, res, next) => {
     }
 
     // check the key that is contained within the token
-    const decodedToken = jwt.verify(token, 'supersecret_dont_share');
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     req.userData = { userId: decodedToken.userId };
     next();
 }
